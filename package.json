@@ -1,0 +1,62 @@
+{
+  "name": "scheduler",
+  "version": "1.0.0",
+  "description": "scheduling api for 10x resturant pos",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src --out-dir dist --source-maps",
+    "debug": "npm run babeldebug & nodemon dist/index.js --ignore src/",
+    "babeldebug": "babel src --watch --out-dir dist --source-maps",
+    "prestart": "npm run build",
+    "start": " node dist/index.js",
+    "deploy": "gcloud app deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://dakotamurphyucf@github.com/10ex/scheduler.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/10ex/scheduler/issues"
+  },
+  "homepage": "https://github.com/10ex/scheduler#readme",
+  "dependencies": {
+    "@babel/cli": "7.0.0",
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
+    "@babel/preset-env": "^7.2.3",
+    "@google/maps": "^0.5.5",
+    "blipp": "^3.1.1",
+    "boom": "^7.3.0",
+    "confidence": "^4.0.1",
+    "eslint": "^5.10.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.1",
+    "firebase-admin": "^6.4.0",
+    "fluture": "^10.3.0",
+    "glue": "^5.0.0",
+    "good": "^8.1.1",
+    "good-console": "^7.1.0",
+    "good-squeeze": "^5.1.0",
+    "hapi-swagger": "^9.2.0",
+    "hapi-swaggered": "^3.0.2",
+    "hapi-swaggered-ui": "^3.0.2",
+    "happi": "^0.9.1",
+    "inert": "^5.1.2",
+    "joi": "13.2.0",
+    "mocha": "^5.2.0",
+    "moment": "^2.23.0",
+    "ramda": "^0.26.1",
+    "request": "^2.88.0",
+    "vision": "^5.4.4"
+  },
+  "devDependencies": {
+    "@babel/node": "^7.2.2",
+    "nodemon": "^1.18.9"
+  }
+}
