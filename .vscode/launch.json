@@ -10,7 +10,10 @@
       "name": "Debug",
       "program": "${workspaceFolder}/src/index.js",
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/babel-node",
-      "runtimeArgs": ["--nolazy"]
+      "runtimeArgs": ["--nolazy"],
+      "env": {
+        "BABEL_ENV": "debug"
+      },
     }
   ]
 }
