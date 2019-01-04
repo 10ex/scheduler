@@ -11,5 +11,11 @@
   ],
   "plugins": [
       "@babel/plugin-proposal-object-rest-spread"
-  ]
+  ],
+  "env": {
+    "debug": {
+      "sourceMaps": "inline",
+      "retainLines": true
+    }
+  }
 }
