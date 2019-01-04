@@ -1,0 +1,20 @@
+{
+  "extends": ["eslint:recommended", "airbnb"],
+  "rules": {
+    "no-bitwise": "off",
+    "no-underscore-dangle": "off",
+    "no-nested-ternary": "off",
+    "no-confusing-arrow": "off",
+    "no-console": "off",
+    "semi": "off",
+    "require-yield": "off",
+    "implicit-arrow-linebreak": "off",
+    "import/prefer-default-export": "off",
+    "react/jsx-filename-extension": "off",
+    "react/prop-types": "off"
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 9
+  }
+}
