@@ -1,1 +1,0 @@
-{"version":3,"sources":["../../../src/server/lib/createFutures.js"],"names":["R","map","Future","encaseP"],"mappings":";;;;;;;AAAA;;AACA;;;;;;eAEeA,eAAEC,GAAF,CAAMC,MAAM,CAACC,OAAb,C","sourcesContent":["import * as Future from 'fluture';\nimport R from 'ramda'\n\nexport default R.map(Future.encaseP)\n"],"file":"createFutures.js"}
