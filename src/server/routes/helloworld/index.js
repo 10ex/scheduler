@@ -4,7 +4,7 @@ function helloWorld(server, options) {
     path: '/',
     config: {
       id: 'helloWorld',
-      tags: ['hello', 'world'],
+      tags: ['hello', 'api', 'world'],
       description: 'return hello world',
       pre: [
 
