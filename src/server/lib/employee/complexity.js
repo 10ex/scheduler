@@ -7,7 +7,7 @@ import R from 'ramda'
  *
  *  algoithm is sum of the hours availible in an availibility list
  */
-export const complexity = R.compose(
+export const calcComplexity = R.compose(
   R.reduce(R.add, 0),
   R.flatten,
   R.map(R.prop('hours')),
@@ -15,7 +15,8 @@ export const complexity = R.compose(
 
 
 // list of employyes   return a sorted list by complexity
-// [employee { id: string, avialibility: [...]} ]
+// [{ id: string, avialibility: [...]} ]
 export const sortByComplexity = R.sort(
-  (a, b) => complexity(b.avialibility) - complexity(a.avialibility),
+  (a, b) => calcComplexity(b.avialibility) - calcComplexity(a.avialibility),
 )
+
