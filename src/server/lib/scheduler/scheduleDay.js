@@ -2,7 +2,6 @@
 import R from 'ramda'
 
 const scheduleDay = (openShifts, employees, { scheduledShifts = [], schduledEmployees = [] }) => {
-  //noah
   const shift = getMostComplexShift(openShifts, employees)
   const employee = getEmployee(shift, employees, schduledEmployees)
   const scheduledShift = employee ? { shift, id: employee.id } : false
