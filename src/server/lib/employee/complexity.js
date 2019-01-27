@@ -20,3 +20,7 @@ export const sortByComplexity = R.sort(
   (a, b) => calcComplexity(b.avialibility) - calcComplexity(a.avialibility),
 )
 
+export const mostComplexEmployee = R.compose(
+  R.head,
+  sortByComplexity,
+)
