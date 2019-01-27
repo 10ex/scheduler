@@ -33,6 +33,17 @@ export const mostComplexDay = (WD, employees) => {
     workWeek.push(complexity)
   }
   const diff = function (a, b) { return a - b }
-  R.sort(diff, workWeek)
-  return workWeek[0]
+  return R.sort(diff, workWeek)[0]
+}
+
+// withoutDay(laborDistribution(array of workday), dayLaborRequirements(workday))
+
+export const withoutDay = (laborDistribution, dayLaborRequirements) => {
+  const day = laborDistribution.find(workDay => workDay.day === dayLaborRequirements.day)
+  const newLaborDistribution = []
+  for (let i = 0; i < laborDistribution.length; i++) {
+    // eslint-disable-next-line no-unused-expressions
+    laborDistribution[i].day !== day ? newLaborDistribution.push(laborDistribution[i]) : null
+  }
+  return newLaborDistribution
 }
