@@ -1,5 +1,7 @@
 {
-  "extends": ["eslint:recommended", "airbnb"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": ["eslint:recommended", "airbnb", "plugin:@typescript-eslint/recommended"],
   "rules": {
     "no-bitwise": "off",
     "no-underscore-dangle": "off",
@@ -12,9 +14,5 @@
     "import/prefer-default-export": "off",
     "react/jsx-filename-extension": "off",
     "react/prop-types": "off"
-  },
-  "parserOptions": {
-    "sourceType": "module",
-    "ecmaVersion": 9
   }
 }

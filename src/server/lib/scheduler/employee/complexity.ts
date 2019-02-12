@@ -17,7 +17,7 @@ export const calcComplexity = R.compose(
 // list of employyes   return a sorted list by complexity
 // [{ id: string, avialibility: [...]} ]
 export const sortByComplexity = R.sort(
-  (a, b) => calcComplexity(b.avialibility) - calcComplexity(a.avialibility),
+  (a, b) => calcComplexity(b.availability) - calcComplexity(a.availability),
 )
 
 export const mostComplexEmployee = R.compose(

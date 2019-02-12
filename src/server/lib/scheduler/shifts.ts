@@ -1,9 +1,9 @@
 import R from 'ramda'
 // shift === { day: 'Sunday', clockIn: 3, clockOut: 11 }
-// employee === { id: string, avialibility:[{day: Sunday, hours: [0,1,1, 1, 1, 1, 1, 0, 1] }, .... ,{day: Saturday}] }
+// employee === { id: string, availability:[{day: Sunday, hours: [0,1,1, 1, 1, 1, 1, 0, 1] }, .... ,{day: Saturday}] }
 export const isAvailible = (shift, employee) => {
   const isFree = currentValue => currentValue === 1
-  return employee.availiability.find(day => day.day === shift.day).hours.slice((shift.clockIn + 1), (shift.clockOut)).every(isFree)
+  return employee.availability.find(day => day.day === shift.day).hours.slice((shift.clockIn + 1), (shift.clockOut)).every(isFree)
 }
 
 export const getAvailibleEmployees = (shift, employees) => {
@@ -94,5 +94,5 @@ export const generateShifts = (laborRequirements, shifts = [], id = 0) => {
       id + 1,
     )
 }
-const lr = { day: 'Sunday', distribution: [0, 0, 0, 0, 0, 0, 0, 2, 2, 4, 4, 4, 5, 5, 3, 3, 3, 6, 6, 6, 6, 4, 4, 4] }
-console.log(generateShifts(lr).map(obj => `${obj.clockIn <= 12 ? obj.clockIn : obj.clockIn - 12}${obj.clockIn <= 12 ? 'AM' : 'PM'} - ${obj.clockOut <= 12 ? obj.clockOut : obj.clockOut - 12}${obj.clockOut <= 12 ? 'AM' : 'PM'}, hours: ${obj.clockOut - obj.clockIn}`))
+//const lr = { day: 'Sunday', distribution: [0, 0, 0, 0, 0, 0, 0, 2, 2, 4, 4, 4, 5, 5, 3, 3, 3, 6, 6, 6, 6, 4, 4, 4] }
+//console.log(generateShifts(lr).map(obj => `${obj.clockIn <= 12 ? obj.clockIn : obj.clockIn - 12}${obj.clockIn <= 12 ? 'AM' : 'PM'} - ${obj.clockOut <= 12 ? obj.clockOut : obj.clockOut - 12}${obj.clockOut <= 12 ? 'AM' : 'PM'}, hours: ${obj.clockOut - obj.clockIn}`))

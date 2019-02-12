@@ -4,11 +4,15 @@
   "description": "scheduling api for 10x resturant pos",
   "main": "index.js",
   "scripts": {
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "npm run type-check -- --watch",
+    "build": "npm run build:js && npm run build:types",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:js": "babel src --out-dir dist --extensions \".ts,.tsx\" --source-maps inline",
     "lint": "eslint .",
     "test": "jest",
-    "build": "babel src --out-dir dist --source-maps",
     "debug": "npm run babeldebug & nodemon dist/index.js --ignore src/",
-    "babeldebug": "babel src --watch --out-dir dist --source-maps",
+    "babeldebug": "babel src --watch --out-dir dist --extensions \".ts,.tsx\" --source-maps inline",
     "prestart": "npm run build",
     "start": " node dist/index.js",
     "deploy": "gcloud app deploy"
@@ -24,11 +28,13 @@
   },
   "homepage": "https://github.com/10ex/scheduler#readme",
   "dependencies": {
-    "@babel/cli": "7.0.0",
-    "@babel/core": "^7.2.2",
-    "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
-    "@babel/preset-env": "^7.2.3",
     "@google/maps": "^0.5.5",
+    "@types/confidence": "^1.4.30",
+    "@types/glue": "^5.0.4",
+    "@types/hapi": "^18.0.0",
+    "@types/ramda": "^0.25.47",
+    "@types/boom": "7.2.0",
+    "@types/joi": "13.0.8",
     "blipp": "^3.1.1",
     "boom": "^7.3.0",
     "confidence": "^4.0.1",
@@ -53,11 +59,25 @@
     "moment": "^2.23.0",
     "ramda": "^0.26.1",
     "request": "^2.88.0",
+    "ts-jest": "^23.10.5",
+    "tslint": "^5.12.1",
     "vision": "^5.4.4"
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.0",
+    "@babel/core": "^7.2.2",
     "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.2.1",
+    "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/preset-typescript": "^7.1.0",
+    "@typescript-eslint/eslint-plugin": "^1.2.0",
+    "babel-plugin-tailcall-optimization": "^2.0.0",
     "jest": "^24.0.0",
-    "nodemon": "^1.18.9"
+    "nodemon": "^1.18.9",
+    "tslint-config-airbnb": "^5.11.1",
+    "tslint-eslint-rules": "^5.4.0",
+    "tslint-immutable": "^5.1.2",
+    "typescript": "^3.2.2"
   }
 }

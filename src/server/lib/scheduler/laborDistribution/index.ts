@@ -9,8 +9,9 @@ export const calculateDayComplexity = (WD, employees) => {
 
   const employeeDays = []
   for (let i = 0; i < employees.length; i++) {
-    const day = employees[i].availibility.find(workDay => workDay.day === WD.day)
-    employeeDays.push(day)
+    const day = employees[i].availability.find(workDay => workDay.day === WD.day)
+    if (employees[i].totalHours < 40)
+      employeeDays.push(day)
   }
   const employeeHours = calcComplexity(employeeDays)
 
@@ -26,14 +27,14 @@ export const calculateDayComplexity = (WD, employees) => {
 
 // returns the most complex day
 
-export const mostComplexDay = (WD, employees) => {
+export const getMostComplexDay = (WD, employees) => {
   const workWeek = []
   for (let i = 0; i < WD.length; i++) {
     const complexity = calculateDayComplexity(WD[i], employees)
-    workWeek.push(complexity)
+    workWeek.push({ complexity, index: i })
   }
-  const diff = function (a, b) { return a - b }
-  return R.sort(diff, workWeek)[0]
+  const diff = function (a, b) { return a.complexity - b.complexity }
+  return WD[R.sort(diff, workWeek)[0].index]
 }
 
 // withoutDay(laborDistribution(array of workday), dayLaborRequirements(workday))
@@ -43,7 +44,7 @@ export const withoutDay = (laborDistribution, dayLaborRequirements) => {
   const newLaborDistribution = []
   for (let i = 0; i < laborDistribution.length; i++) {
     // eslint-disable-next-line no-unused-expressions
-    laborDistribution[i].day !== day ? newLaborDistribution.push(laborDistribution[i]) : null
+    laborDistribution[i].day !== day.day ? newLaborDistribution.push(laborDistribution[i]) : null
   }
   return newLaborDistribution
 }

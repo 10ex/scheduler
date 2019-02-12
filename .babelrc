@@ -7,10 +7,13 @@
                   "node": "current"
               }
           }
-      ]
+      ],
+      "@babel/typescript"
   ],
   "plugins": [
-      "@babel/plugin-proposal-object-rest-spread"
+      "@babel/proposal-class-properties",
+      "@babel/plugin-proposal-object-rest-spread",
+      "tailcall-optimization"
   ],
   "env": {
     "debug": {

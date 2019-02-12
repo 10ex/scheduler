@@ -1,6 +1,12 @@
-import R from 'ramda'
+import ramda from 'ramda'
+import { getUpdatedEmployeeList } from './employee/update'
+import { getMostComplexDay, withoutDay } from './laborDistribution'
+import { scheduleDay } from './scheduleDay'
+import { generateShifts } from './shifts'
 
-const createSchedule = (laborDistribution, employees, schedule = []) => {
+const R = ramda
+
+const createSchedule = (laborDistribution, employees, schedule: ReadonlyArray<any> = []) => {
   const laborRequirements = getMostComplexDay(laborDistribution, employees)
   const workDay = scheduleDay(generateShifts(laborRequirements), employees)
   const updatedSchedule = R.append(workDay, schedule)
@@ -13,3 +19,5 @@ const createSchedule = (laborDistribution, employees, schedule = []) => {
     )
     : updatedSchedule
 }
+
+export default createSchedule
