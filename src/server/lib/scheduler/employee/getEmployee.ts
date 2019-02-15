@@ -1,8 +1,13 @@
 import R from 'ramda'
+import { IEmployee } from '../interfaces/employee'
+import { IShift } from '../interfaces/schedule'
 import { getAvailibleEmployees } from '../shifts'
 import { sortByComplexity } from './complexity';
 
-const getEmployee = (shift, employees, schduledEmployees) => {
+const getEmployee = (
+  shift: IShift, employees: ReadonlyArray<IEmployee>,
+  schduledEmployees: ReadonlyArray<IEmployee>,
+) => {
   const availible = getAvailibleEmployees(shift, employees)
   const backup = R.isEmpty(availible) ? getAvailibleEmployees(shift, schduledEmployees) : []
   const sortedEmployees = !R.isEmpty(availible)

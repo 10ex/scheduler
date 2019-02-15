@@ -3,20 +3,23 @@ import ramda from 'ramda'
 import getEmployee from './employee/getEmployee'
 import { applyShift } from './employee/update'
 import { withoutEmployee, withoutShift } from './general'
+import { IEmployee } from './interfaces/employee'
+import { IScheduledShift, IShift } from './interfaces/schedule'
 import { getMostComplexShift } from './shifts'
 
 interface IScheduledShiftParams {
-  readonly scheduledShifts: ReadonlyArray<any>;
-  readonly schduledEmployees: ReadonlyArray<any>;
+  readonly scheduledShifts: ReadonlyArray<IScheduledShift>;
+  readonly schduledEmployees: ReadonlyArray<IEmployee>;
 }
 
 const R = ramda
 export const scheduleDay = (
-  openShifts, employees,
+  openShifts: ReadonlyArray<IShift>,
+  employees: ReadonlyArray<IEmployee>,
   {
      scheduledShifts, schduledEmployees,
   }: IScheduledShiftParams = { scheduledShifts: [], schduledEmployees: [] },
-) => {
+): ReadonlyArray<IScheduledShift> => {
   const shift = getMostComplexShift(openShifts, employees)
   const employee = getEmployee(shift, employees, schduledEmployees)
   const scheduledShift = employee ? { shift, employeeId: employee.id } : false

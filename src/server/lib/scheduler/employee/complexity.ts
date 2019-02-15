@@ -1,26 +1,32 @@
 import R from 'ramda'
+import { IAvailibility, IEmployee } from '../interfaces/employee'
 
-/**
- * Create function that given an employee availibility list,
- *  calculate the the employees complexity score
- * [{day: Sunday, hours: [0,1,1, 1, 1, 1, 1, 0, 1] }, .... ,{day: Saturday}]
- *
- *  algoithm is sum of the hours availible in an availibility list
- */
-export const calcComplexity = R.compose(
-  R.reduce(R.add, 0),
-  R.flatten,
-  R.map(R.prop('hours')),
+type getTimeSlotsFn = (
+  availibility: ReadonlyArray<IAvailibility>,
+) => ReadonlyArray<ReadonlyArray<1 | 0>>
+
+type flattenNumArrayFn = (arr: ReadonlyArray<ReadonlyArray<1 | 0>>) => ReadonlyArray<1 | 0>
+
+type reduceTimeSlot = (
+  fn: (acc: number, ele: number) => number,
+  init: number,
+) => (slots: ReadonlyArray<number>) => number
+
+type employeeListFn = (employees: ReadonlyArray<IEmployee>) => ReadonlyArray<IEmployee>
+
+const getTimeSlots: getTimeSlotsFn = R.map(R.prop('timeSlots'))
+
+export const calcComplexity: (availibility: ReadonlyArray<IAvailibility>) => number = R.compose(
+  (R.reduce as reduceTimeSlot)(R.add, 0),
+  R.flatten as flattenNumArrayFn,
+  getTimeSlots,
 )
 
-
-// list of employyes   return a sorted list by complexity
-// [{ id: string, avialibility: [...]} ]
-export const sortByComplexity = R.sort(
+export const sortByComplexity: employeeListFn = R.sort(
   (a, b) => calcComplexity(b.availability) - calcComplexity(a.availability),
 )
 
 export const mostComplexEmployee = R.compose(
-  R.head,
+  R.head as (l: ReadonlyArray<IEmployee>) => IEmployee,
   sortByComplexity,
 )

@@ -1,14 +1,16 @@
 import R from 'ramda'
-// off employees availability and add to totalHours, scheduledshifts feild on employee
-// employee === { id: string, avialiability:[{day: Sunday, hours: [0,1,1, 1, 1, 1, 1, 0, 1] }, .... ,{day: Saturday}], totalHours: 0 }
-// shift === { day: 'Sunday', clockIn: 3, clockOut: 11 }
+import { IEmployee } from '../interfaces/employee'
+import { IScheduledShift, IShift } from '../interfaces/schedule'
 
-export const applyShift = (shift, employee) => {
+export const applyShift = (shift: IShift, employee: IEmployee) => {
   const totalHours = shift.clockOut - shift.clockIn
-  const shiftTime = (current, index) =>
+  const shiftTime = (current: number, index: number) =>
     index >= shift.clockIn && index < shift.clockOut ? 0 : current
   const updatedEmployeeList = employee.availability.map(
-    day => ({ ...day, hours: day.day === shift.day ? day.hours.map(shiftTime) : day.hours }),
+    day => ({
+      ...day,
+      hours: day.day === shift.day ? day.timeSlots.map(shiftTime) : day.timeSlots,
+    }),
   )
   return {
     ...employee,
@@ -22,10 +24,13 @@ const hasId = (id: string): (obj: { readonly id: string }) => any => R.compose(
   R.prop('id'),
 )
 
-export const getEmployeeIndex = employees => id => R.findIndex(hasId(id), employees)
+export const getEmployeeIndex = (employees: ReadonlyArray<IEmployee>) =>
+  (id: string) => R.findIndex(hasId(id), employees)
 
-// [{ shift, employeeId: employee.id } ]
-export const getUpdatedEmployeeList = (employees, scheduledDay) => {
+export const getUpdatedEmployeeList = (
+  employees: ReadonlyArray<IEmployee>,
+  scheduledDay: ReadonlyArray<IScheduledShift>,
+): ReadonlyArray<IEmployee> => {
   const employeeIndex = getEmployeeIndex(employees)(scheduledDay[0].employeeId)
   const updatedEmp = applyShift(scheduledDay[0].shift, employees[employeeIndex])
   const updatedEmployeeList = R.update(employeeIndex, updatedEmp, employees)

@@ -1,12 +1,17 @@
 import R from 'ramda'
-// shift === { day: 'Sunday', clockIn: 3, clockOut: 11 }
-// employee === { id: string, availability:[{day: Sunday, hours: [0,1,1, 1, 1, 1, 1, 0, 1] }, .... ,{day: Saturday}] }
-export const isAvailible = (shift, employee) => {
-  const isFree = currentValue => currentValue === 1
-  return employee.availability.find(day => day.day === shift.day).hours.slice((shift.clockIn + 1), (shift.clockOut)).every(isFree)
+import { IEmployee } from './interfaces/employee'
+import { ILaborDistribution } from './interfaces/laborDistribution'
+import { IShift } from './interfaces/schedule'
+
+export const isAvailible = (shift: IShift, employee: IEmployee) => {
+  const isFree = (currentValue: number) => currentValue === 1
+  const workDay = employee.availability.find(day => day.day === shift.day)
+  return workDay
+    ? workDay.timeSlots.slice((shift.clockIn + 1), (shift.clockOut)).every(isFree)
+    : false
 }
 
-export const getAvailibleEmployees = (shift, employees) => {
+export const getAvailibleEmployees = (shift: IShift, employees: ReadonlyArray<IEmployee>) => {
   const availiableEmployees = []
   for (let i = 0; i < employees.length; i++) {
     // eslint-disable-next-line no-unused-expressions
@@ -15,27 +20,36 @@ export const getAvailibleEmployees = (shift, employees) => {
   return availiableEmployees
 }
 
-export const getMostComplexShift = (shifts, employees) => {
+export const getMostComplexShift = (
+  shifts: ReadonlyArray<IShift>,
+  employees: ReadonlyArray<IEmployee>,
+) => {
   const pool = []
   for (let i = 0; i < shifts.length; i++) {
     const poolsize = getAvailibleEmployees(shifts[i], employees).length
     const shift = shifts[i]
     pool.push({ poolsize, shift })
   }
-  const diff = function (a, b) { return a.poolsize - b.poolsize }
+  const diff = function (a: {poolsize: number}, b: {poolsize: number}) { return a.poolsize - b.poolsize }
   return R.sort(diff, pool)[0].shift
 }
 
-export const refineShifts = (shifts, min) => {
+export const refineShifts = (
+  shifts: ReadonlyArray<IShift>,
+  min: number,
+): ReadonlyArray<IShift> => {
   const clampToMin = R.clamp(min, Infinity)
   const invalidShiftIndex = R.findIndex(
     s => (s.clockOut - s.clockIn) < min,
     shifts,
   )
   const proptToModify = invalidShiftIndex !== -1
-    ? (shifts[invalidShiftIndex].clockIn - shifts[0].clockIn) > (min - (shifts[invalidShiftIndex].clockOut - shifts[invalidShiftIndex].clockIn))
-      ? 'clockIn'
-      : 'clockOut'
+    ? (
+        shifts[invalidShiftIndex].clockIn - shifts[0].clockIn) >
+        (min - (shifts[invalidShiftIndex].clockOut - shifts[invalidShiftIndex].clockIn)
+      )
+        ? 'clockIn'
+        : 'clockOut'
     : null
 
   const shiftToModifyIndex = invalidShiftIndex !== -1
@@ -45,10 +59,10 @@ export const refineShifts = (shifts, min) => {
     )
     : -1
 
-  return invalidShiftIndex === -1
+  return proptToModify === null
     ? shifts
     : refineShifts(
-      R.addIndex(R.map)(
+      shifts.map(
         (shift, index) => index === shiftToModifyIndex
           ? {
             ...shift,
@@ -66,12 +80,15 @@ export const refineShifts = (shifts, min) => {
                 : shift.clockOut + (min - (shift.clockOut - shift.clockIn)),
             }
             : shift,
-      )(shifts),
+      ),
       min,
     )
 }
 
-export const generateShifts = (laborRequirements, shifts = [], id = 0) => {
+export const generateShifts = (
+  laborRequirements: ILaborDistribution,
+  shifts: ReadonlyArray<IShift> = [], id = 0,
+): ReadonlyArray<IShift> => {
   const { day, distribution } = laborRequirements
   const clockIn = R.findIndex(R.lt(0))(distribution)
   const remainingHours = R.drop(clockIn + 1, distribution)
@@ -82,9 +99,9 @@ export const generateShifts = (laborRequirements, shifts = [], id = 0) => {
   )(remainingHours)
   const clockOut = clockIn + shiftLength
   const shift = { id, day, clockIn, clockOut }
-  const updatedDistribution = R.addIndex(R.map)(
+  const updatedDistribution = distribution.map(
     (num, index) => index >= clockIn && index < clockOut ? num - 1 : num,
-  )(distribution)
+  )
   const updatedShifts = R.append(shift, shifts)
   return R.all(R.equals(0))(updatedDistribution)
     ? refineShifts(updatedShifts, 4)
@@ -94,5 +111,3 @@ export const generateShifts = (laborRequirements, shifts = [], id = 0) => {
       id + 1,
     )
 }
-//const lr = { day: 'Sunday', distribution: [0, 0, 0, 0, 0, 0, 0, 2, 2, 4, 4, 4, 5, 5, 3, 3, 3, 6, 6, 6, 6, 4, 4, 4] }
-//console.log(generateShifts(lr).map(obj => `${obj.clockIn <= 12 ? obj.clockIn : obj.clockIn - 12}${obj.clockIn <= 12 ? 'AM' : 'PM'} - ${obj.clockOut <= 12 ? obj.clockOut : obj.clockOut - 12}${obj.clockOut <= 12 ? 'AM' : 'PM'}, hours: ${obj.clockOut - obj.clockIn}`))

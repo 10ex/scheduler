@@ -1,18 +1,23 @@
-import ramda from 'ramda'
+import R from 'ramda'
 import { getUpdatedEmployeeList } from './employee/update'
+import { IEmployee } from './interfaces/employee'
+import { ILaborDistribution } from './interfaces/laborDistribution'
+import { IScheduledShift } from './interfaces/schedule'
 import { getMostComplexDay, withoutDay } from './laborDistribution'
 import { scheduleDay } from './scheduleDay'
 import { generateShifts } from './shifts'
 
-const R = ramda
-
-const createSchedule = (laborDistribution, employees, schedule: ReadonlyArray<any> = []) => {
-  const laborRequirements = getMostComplexDay(laborDistribution, employees)
+const createSchedule = (
+  laborDistributions: ReadonlyArray<ILaborDistribution>,
+  employees: ReadonlyArray<IEmployee>,
+  schedule: ReadonlyArray<ReadonlyArray<IScheduledShift>> = [],
+): ReadonlyArray<ReadonlyArray<IScheduledShift>> => {
+  const laborRequirements = getMostComplexDay(laborDistributions, employees)
   const workDay = scheduleDay(generateShifts(laborRequirements), employees)
   const updatedSchedule = R.append(workDay, schedule)
-  return laborDistribution.length > 1
+  return laborDistributions.length > 1
     ? createSchedule(
-      withoutDay(laborDistribution, laborRequirements),
+      withoutDay(laborDistributions, laborRequirements),
       // noah
       getUpdatedEmployeeList(employees, workDay),
       updatedSchedule,
