@@ -3,7 +3,7 @@ import { ILaborDistribution } from './interfaces/laborDistribution'
 const ld: ReadonlyArray<ILaborDistribution>  = [
   {
     day: 'Sunday',
-    distribution: [0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2],
+    distribution: [0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2],
   },
   {
     day: 'Monday',
